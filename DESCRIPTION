@@ -1,0 +1,12 @@
+Package: taper
+Type: Package
+Title: Taper equation computations
+Version: 0.1.0
+Author: Oscar García
+Maintainer: O. Garcia <garciaf@dasometrics.net>
+Description: Implements the tree taper (or profile) equation from
+    García, O. (2015) "Dynamic modelling of tree form", MCFNS 7(1): 9-15.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.2
