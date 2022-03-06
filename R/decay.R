@@ -23,7 +23,7 @@ decay <- function(x, p){
   if(abs(p) < 1e-300) exp(-x)
   else{
     suppressWarnings( # trap NaN's message
-      v <- exp(log1p(-p * x) / p) # same as (1 - p*x)^(1/p)
+      v <- exp(log1p(-p * x) / p) # "same" as (1 - p*x)^(1/p)
     )
     v[is.nan(v)] <- 0  # when 1 - p*x <= 0
     return(v)
@@ -46,7 +46,7 @@ decay <- function(x, p){
 #'    for(p in seq(1, -1, -0.5)) curve(Id(x, p), 0, 3, add=(p != 1))
 #'
 Id <- function(x, p){
-  if(abs(p + 1) < 1e-10) log1p(x)
+  if(abs(p + 1) < 1e-8) log1p(pmax(x, -1))
   else (1 - decay((p + 1) * x, p / (p + 1))) / (p + 1)
 }
 
@@ -66,6 +66,11 @@ Id <- function(x, p){
 #'    for(p in seq(1, -1, -0.5)) curve(Idd(x, p), 0, 3, add=(p != 1))
 #'
 Idd <- function(x, p){
-  if(abs(p + 1) < 1e-10) (x + 1) * log1p(x) - x
-  else (x - Id((p + 1) * x, p / (p + 1)) / (p + 1)) / (p + 1)
+  if(abs(p + 1) < 1e-8){  # p = -1 (approx)
+       suppressWarnings(v <- (x + 1) * log1p(x) - x)  # ignore NaN's
+       v[is.nan(v)] <- Inf  # x <= -1
+       v[x == -1] <- 1  # just in case
+  }
+  else v <- (x - Id((p + 1) * x, p / (p + 1)) / (p + 1)) / (p + 1)
+  return(v)
 }

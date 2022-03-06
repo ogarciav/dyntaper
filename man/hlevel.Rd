@@ -4,10 +4,10 @@
 \alias{hlevel}
 \title{Height level for given diameter or area.}
 \usage{
-hlevel(da, H, D, b, BH, area)
+hlevel(ds, H, D, b, BH, area)
 }
 \arguments{
-\item{da}{The given diameter or area.}
+\item{ds}{The given diameter or area.}
 
 \item{H}{Tree total height.}
 
@@ -17,16 +17,17 @@ hlevel(da, H, D, b, BH, area)
 
 \item{BH}{Breast height. Typically 1.2, 1.3 or 1.4 m, or 4.5 ft.}
 
-\item{area}{If TRUE, '\code{da}' is a cross-sectional area, otherwise a
+\item{area}{If TRUE, '\code{ds}' is a cross-sectional area, otherwise a
 diameter.}
 }
 \value{
-Height level corresponding to '\code{sa}', if any, otherwise \code{NA}.
+Height level corresponding to '\code{ds}', if any, otherwise \code{NA}.
 }
 \description{
 Find the height level at which the tree reaches a given diameter (if
-    \code{area == FALSE}, default) or a given cross-sectional area (if \code{area == TRUE}).
-    That is, the inverse of \code{profile()}, except that a vector argument
+    \code{area == FALSE}, default) or a given cross-sectional area (if
+    \code{area == TRUE}).
+    That is, the inverse of \code{taper()}, except that a vector argument
     is not allowed.
 }
 \examples{

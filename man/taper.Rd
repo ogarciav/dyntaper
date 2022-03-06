@@ -11,7 +11,7 @@ taper(h, H, D, b, BH, area)
 
 \item{H}{Tree total height.}
 
-\item{D}{Tree diameter at breast height.}
+\item{D}{Tree diameter at breast height (dbh).}
 
 \item{b}{Vector with the 5 parameters.}
 
@@ -21,11 +21,17 @@ taper(h, H, D, b, BH, area)
 diameters.}
 }
 \value{
-Diameter(s) at level(s) '\code{h}' if '\code{area}' is FALSE (default),
+Diameter(s) at level(s) '\code{h}' if '\code{area}' is FALSE,
            otherwise cross-sectional area(s).
 }
 \description{
 Returns the diameter or cross-sectional area at one or more hight levels.
+}
+\note{
+Diameters or areas are either all outside bark, or all inside bark.
+  A dbh outside bark can be used with an inside-bark taper equation through
+  a substitution \code{D -> k * D}, where \code{k} is an outside to inside
+   bark conversion factor.
 }
 \examples{
   curve(taper(x, 32, 24, c(2.569, 0, 1.042, 0.3012, -1), 1.3, FALSE), 0, 32)
