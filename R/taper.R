@@ -12,16 +12,16 @@
 #' @param b     Vector with the 5 parameters.
 #' @param BH    Breast height. Typically 1.2, 1.3 or 1.4 m, or 4.5 ft.
 #' @param area  If TRUE, returns cross-sectional areas, otherwise returns
-#'                diameters.
+#'                diameters. Default is FALSE.
 #'
 #' @return  Diameter(s) at level(s) '\code{h}' if '\code{area}' is FALSE,
 #'            otherwise cross-sectional area(s).
 #' @export
 #'
 #' @examples
-#'   curve(taper(x, 32, 24, c(2.569, 0, 1.042, 0.3012, -1), 1.3, FALSE), 0, 32)
+#'   curve(taper(x, 32, 24, c(2.569, 0, 1.042, 0.3012, -1), 1.3), 0, 32)
 #'
-taper <- function(h, H, D, b, BH, area){
+taper <- function(h, H, D, b, BH, area = FALSE){
   r <- tbase(h, H, b) / tbase(BH, H, b) # relative area
   r[h < 0 | h > H] <- 0  # outside the stem
   if(area) pi * (D/2)^2 * r  # area at level h
