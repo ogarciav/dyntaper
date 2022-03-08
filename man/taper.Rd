@@ -4,7 +4,7 @@
 \alias{taper}
 \title{Tree taper (or profile) equation.}
 \usage{
-taper(h, H, D, b, BH, area)
+taper(h, H, D, b, BH, area = FALSE)
 }
 \arguments{
 \item{h}{Height level(s), possibly a vector.}
@@ -18,7 +18,7 @@ taper(h, H, D, b, BH, area)
 \item{BH}{Breast height. Typically 1.2, 1.3 or 1.4 m, or 4.5 ft.}
 
 \item{area}{If TRUE, returns cross-sectional areas, otherwise returns
-diameters.}
+diameters. Default is FALSE.}
 }
 \value{
 Diameter(s) at level(s) '\code{h}' if '\code{area}' is FALSE,
@@ -34,6 +34,6 @@ Diameters or areas are either all outside bark, or all inside bark.
    bark conversion factor.
 }
 \examples{
-  curve(taper(x, 32, 24, c(2.569, 0, 1.042, 0.3012, -1), 1.3, FALSE), 0, 32)
+  curve(taper(x, 32, 24, c(2.569, 0, 1.042, 0.3012, -1), 1.3), 0, 32)
 
 }

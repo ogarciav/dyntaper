@@ -13,4 +13,4 @@ RoxygenNote: 7.1.2
 Depends: 
     R (>= 2.10)
 VignetteBuilder: knitr
-Suggests: knitr
+Suggests: knitr, lattice

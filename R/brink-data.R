@@ -15,4 +15,4 @@
 #' @source {Brink, C. and von Gadow, K. (1986) "On the use of growth and decay
 #'   functions for modelling stem profiles". \emph{EDV in Medizin und Biologi
 #'   17}, 20-27}
-"brink86"
+"brink"
