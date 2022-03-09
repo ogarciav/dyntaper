@@ -102,7 +102,7 @@
 <<setup, include=FALSE, cache=FALSE>>=
 library(knitr)
 opts_chunk$set(fig.align='center', # fig.show='hold',
-dev='pdf', out.width='.45\\textwidth') # , highlight=FALSE)
+dev='pdf', out.width='.6\\textwidth') # , highlight=FALSE)
 options(width=67)
 @
 
@@ -171,7 +171,7 @@ In the case of $\eta$ we want some ``decay'' function that, ignoring scale facto
 \end{align*}
 The notation $(\cdot)_+$ is shorthand for the non-negative truncation $max\{\cdot, 0\}$, which can be relevant when $p > 0$. This is implemented in the package function \code{decay()}:
 <<>>=
-library(taper)
+library(dyntaper)
 for(p in seq(1, -1, -0.5)) curve(decay(y, p), xname="y", from=0,
   to=3, add=(p != 1))
 @
