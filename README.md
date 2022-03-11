@@ -6,9 +6,9 @@
 
 An *R* package that implements the model of García (2015).
 
-The main functions are *taper()*, which calculates diameters at specified height levels up the tree, it's inverse *hlevel()*, which gives the height level for a given diameter, and *volume()*, which computes the volume between two height levels.
+The main functions are *taper()*, which calculates diameters at specified height levels up the tree, its inverse *hlevel()*, which gives the height level for a given diameter, and *volume()*, which computes the volume between two height levels.
 
-For a tutorial, see the [vignette](https://github.com/ogarciav/siplab/blob/master/doc/dyntaper.pdf).
+For a tutorial, see the [vignette](https://github.com/ogarciav/dyntaper/blob/master/doc/dyntaper.pdf).
 
 ## Installation
 
