@@ -4,7 +4,7 @@
 \alias{taper}
 \title{Tree taper (or profile) equation.}
 \usage{
-taper(h, H, D, b, BH, area = FALSE)
+taper(h, H, D, b, bh, area = FALSE)
 }
 \arguments{
 \item{h}{Height level(s), possibly a vector.}
@@ -15,7 +15,7 @@ taper(h, H, D, b, BH, area = FALSE)
 
 \item{b}{Vector with the 5 parameters.}
 
-\item{BH}{Breast height. Typically 1.2, 1.3 or 1.4 m, or 4.5 ft.}
+\item{bh}{Breast height. Typically 1.2, 1.3 or 1.4 m, or 4.5 ft.}
 
 \item{area}{If TRUE, returns cross-sectional areas, otherwise returns
 diameters. Default is FALSE.}

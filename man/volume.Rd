@@ -4,7 +4,7 @@
 \alias{volume}
 \title{Volume between two height levels.}
 \usage{
-volume(h1, h2, H, D, b, BH, RHD)
+volume(h1, h2, H, D, b, bh, rhd)
 }
 \arguments{
 \item{h1, h2}{The two height levels.}
@@ -15,9 +15,9 @@ volume(h1, h2, H, D, b, BH, RHD)
 
 \item{b}{Vector with the 5 parameters.}
 
-\item{BH}{Breast height. Typically 1.2, 1.3 or 1.4 m, or 4.5 ft.}
+\item{bh}{Breast height. Typically 1.2, 1.3 or 1.4 m, or 4.5 ft.}
 
-\item{RHD}{Ratio between the height and diameter units. E.g., 100
+\item{rhd}{Ratio between the height and diameter units. E.g., 100
 for m and cm, or 12 for feet and inches.}
 }
 \value{

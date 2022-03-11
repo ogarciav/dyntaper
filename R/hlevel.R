@@ -10,7 +10,7 @@
 #' @param H     Tree total height.
 #' @param D     Tree diameter at breast height.
 #' @param b     Vector with the 5 parameters.
-#' @param BH    Breast height. Typically 1.2, 1.3 or 1.4 m, or 4.5 ft.
+#' @param bh    Breast height. Typically 1.2, 1.3 or 1.4 m, or 4.5 ft.
 #' @param area  If TRUE, '\code{ds}' is a cross-sectional area, otherwise a
 #'                diameter. Default is FALSE.
 #'
@@ -24,12 +24,12 @@
 #'     hlevel(24, 32, 24, b, 1.3)  # breast height
 #'     hlevel(35, 32, 24, b, 1.3)  # height where the diameter is 35
 #'
-hlevel <- function(ds, H, D, b, BH, area = FALSE){
-  f <- function(h, ds, H, D, b, BH, area){ # find zero of this over h
-    ds - taper(h, H, D, b, BH, area)
+hlevel <- function(ds, H, D, b, bh, area = FALSE){
+  f <- function(h, ds, H, D, b, bh, area){ # find zero of this over h
+    ds - taper(h, H, D, b, bh, area)
   }
   stopifnot(length(ds) == 1) # vector not allowed
-  if(sign(f(0, ds, H, D, b, BH, area)) == sign(f(H, ds, H, D, b, BH, area)))
+  if(sign(f(0, ds, H, D, b, bh, area)) == sign(f(H, ds, H, D, b, bh, area)))
     return(NA) # or NaN?
-  uniroot(f, c(0, H), ds, H, D, b, BH, area, f.upper = ds)$root
+  uniroot(f, c(0, H), ds, H, D, b, bh, area, f.upper = ds)$root
 }

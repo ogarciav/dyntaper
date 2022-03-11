@@ -1,0 +1,18 @@
+citHeader("To cite dyntaper in publications use:")
+
+citEntry(entry = "Article",
+  title        = "Dynamic modelling of tree form",
+  author       = personList(as.person("Oscar García")),
+  journal      = "Mathematical and Computational Forestry & Natural-Resource
+                  Sciences (MCFNS)",
+  year         = "2015",
+  volume       = "7",
+  number       = "1",
+  pages        = "9--15",
+  url          = "http://mcfns.net/index.php/Journal/article/view/MCFNS7.1_2",
+  textVersion  =
+  paste("Oscar Garcia (2015).",
+        "Dynamic modelling of tree form.",
+        "MCFNS 7, 9-15.",
+        "URL http://mcfns.net/index.php/Journal/article/view/MCFNS7.1_2 .")
+)

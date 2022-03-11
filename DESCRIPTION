@@ -1,10 +1,10 @@
 Package: dyntaper
 Type: Package
-Title: Using a dynamic taper equation
-Version: 0.1.0
-Author: Oscar García
+Title: Using a dynamic tree stem profile model
+Version: 1.0
+Author: Oscar Garcia <https://orcid.org/0000-0002-8995-1341>
 Maintainer: O. Garcia <garciaf@dasometrics.net>
-Description: Implements the tree taper (profile) equation from
+Description: Implements the model from
     García, O. (2015) "Dynamic modelling of tree form", MCFNS 7(1): 9-15.
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -14,3 +14,5 @@ Depends:
     R (>= 2.10)
 VignetteBuilder: knitr
 Suggests: knitr, lattice
+URL: https://github.com/ogarciav/dyntaper
+BugReports: https://github.com/ogarciav/dyntaper/issues
