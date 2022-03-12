@@ -3,7 +3,7 @@
 \docType{data}
 \name{brink}
 \alias{brink}
-\title{Small taper data set from Brink and von Gadow (1986).}
+\title{Small taper dataset from Brink and von Gadow (1986).}
 \format{
 A data frame with 108 rows and 5 variables:
 \describe{
@@ -23,6 +23,6 @@ A data frame with 108 rows and 5 variables:
 brink
 }
 \description{
-Taper measurements on 10 \emph{Eucalyptus cJoeziana} trees.
+Taper measurements on 10 \emph{Eucalyptus cloeziana} trees.
 }
 \keyword{datasets}

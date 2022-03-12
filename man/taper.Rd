@@ -34,6 +34,6 @@ Diameters or areas are either all outside bark, or all inside bark.
    bark conversion factor.
 }
 \examples{
-  curve(taper(x, 32, 24, c(2.569, 0, 1.042, 0.3012, -1), 1.3), 0, 32)
+  curve(taper(x, 32, 0.956*24, c(2.569, 0, 1.042, 0.3012, -1), 1.3), 0, 32)
 
 }

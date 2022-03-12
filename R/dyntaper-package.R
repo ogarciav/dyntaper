@@ -1,18 +1,18 @@
 #' @details
 #' The main functions relevant to the user are
-#' \describe{
-#'   \item{\code{\link{taper}}:}{Calculates diameters or cross-sectional areas
-#'     for given height levels.}
-#'   \item{\code{\link{hlevel}}:}{Calculates the height level for a given
-#'     diameter or cross-sectional area.}
-#'   \item{\code{\link{volume}}:}{Calculates the volume between two given height
-#'     levels.}
+#' \itemize{
+#'   \item \code{\link{taper}}: Calculates diameters or cross-sectional areas
+#'     for given height levels.
+#'   \item \code{\link{hlevel}}: Calculates the height level for a given
+#'     diameter or cross-sectional area.
+#'   \item \code{\link{volume}}: Calculates the volume between two given height
+#'     levels.
 #' }
 #' The package includes a small example dataset, \code{\link{brink}}.
 #'
 #' For a tutorial, see the vignette: \code{vignette("dyntaper", package="dyntaper")}.
 #'
-#' @example
+#' @examples
 #'    dfir <- c(2.569, 0, 1.042, 0.3012, -1)  # params. for D.fir in B.C.
 #'    height <- 32; dbh <- 24;  k <- 0.956  # k is a bark conversion factor
 #'    # Plot a taper curve (inside-bark diameter over height levels):
