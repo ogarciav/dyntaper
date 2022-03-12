@@ -14,15 +14,16 @@
 #' @param area  If TRUE, '\code{ds}' is a cross-sectional area, otherwise a
 #'                diameter. Default is FALSE.
 #'
-#' @return      Height level corresponding to '\code{ds}', if any, otherwise \code{NA}.
+#' @return      Height level corresponding to '\code{ds}' if any, otherwise \code{NA}.
 #' @export
 #' @importFrom stats uniroot
 #'
 #' @examples
 #'    b <- c(2.569, 0, 1.042, 0.3012, -1)  # parameters
-#'     hlevel(15, 32, 24, b, 1.3)  # height where the diameter is 15
-#'     hlevel(24, 32, 24, b, 1.3)  # breast height
-#'     hlevel(35, 32, 24, b, 1.3)  # height where the diameter is 35
+#'    Dib <- 0.956 * 24  # convert dbh outside bark to inside bark 
+#'    hlevel(15, 32, Dib, b, 1.3)  # height where the diameter is 15
+#'    hlevel(24, 32, Dib, b, 1.3)  # breast height
+#'    hlevel(35, 32, Dib, b, 1.3)  # height where the diameter is 35
 #'
 hlevel <- function(ds, H, D, b, bh, area = FALSE){
   f <- function(h, ds, H, D, b, bh, area){ # find zero of this over h

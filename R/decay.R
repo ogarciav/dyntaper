@@ -1,6 +1,6 @@
 #' Decay function delta
 #'
-#' Calculates \eqn{(max{1 - p*x, 0})^(1/p)}, or its limit \eqn{exp(-x)}
+#' Calculates \eqn{(1 - p*x)_+^{1/p}}, or its limit \eqn{exp(-x)}
 #'   when \eqn{p} tends to 0.
 #'
 #' @param x   Input value(s), possibly a vector.

@@ -12,10 +12,11 @@
 #' @export
 #'
 #' @examples
-#'     b <- c(2.569, 0, 1.042, 0.3012, -1)  # parameters
-#'     volume(0, 32, 32, 24, b, 1.3, 100)  # total volume
-#'     h15 <- hlevel(15, 32, 24, b, 1.3)  # height for diameter 15
-#'     volume(0.3, h15, 32, 24, b, 1.3, 100)  # volume between stump and h15
+#'    b <- c(2.569, 0, 1.042, 0.3012, -1)  # parameters
+#'    Dib <- 0.956 * 24  # convert dbh outside bark to inside bark 
+#'    volume(0, 32, 32, Dib, b, 1.3, 100)  # total volume
+#'    h15 <- hlevel(15, 32, Dib, b, 1.3)  # height for diameter 15
+#'    volume(0.3, h15, 32, Dib, b, 1.3, 100)  # volume between stump and h15
 #'
 volume <- function(h1, h2, H, D, b, bh, rhd){
   Is <- function(h, H, b){ # indefinite integral of tbase()

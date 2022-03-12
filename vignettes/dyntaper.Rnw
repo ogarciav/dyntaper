@@ -223,10 +223,11 @@ for some complicated function $f()$. Other similar expressions inside the parent
 The taper model is given by eqs.~\eqref{eq:base} and \eqref{eq:taper}, and is implemented in function \code{taper()}. For instance, for a tree with a total height of 32 m and dbh of 24 cm (breast height 1.3 m), using the same vector \code{b} of coefficients as above,
 <<>>=
 curve(
-  taper(h, H=32, D=24, b=b, bh=1.3),
+  taper(h, H=32, D=0.956*24, b=b, bh=1.3),
 from=0, to=32, xname="h")
 @
 \noindent
+The parameters were for an inside-bark model, and 0.956 is the outside- to inside-bark conversion factor.
 Setting \code{area=TRUE} returns cross-sectional areas instead of diameters.
 
 The parameter $b_1$ is supposed to be related to crown length, $b_3$ reflects the contribution of butt swell, and $b_4$ determines how high the but swell extends up from the ground.
@@ -255,7 +256,7 @@ Often, it is necessary to estimate the height $h$ at which the stem has a certai
 
 For instance, the height at which the diameter is 15 cm in a tree 32 m tall with dbh 24 cm is
 <<>>=
-hlevel(15, H=32, D=24, b=b, bh=1.3)
+hlevel(15, H=32, D=0.956*24, b=b, bh=1.3)
 @
 \noindent
 The leading \verb|##| are not displayed by \lang{R}, but are used here to distinguish outputs from inputs. Setting the parameter \code{area = TRUE} produces the height for a given cross-sectional area.
@@ -271,8 +272,8 @@ Volume is given by the integral of the cross-sectional area between the two heig
 
 As an example, for the same tree used before, the volume between a 30 cm stump and a 10 cm diameter limit is:
 <<>>=
-h10 <- hlevel(10, 32, 24, b, 1.3)  # height for diameter 10
-volume(h1=0.3, h2=h10, H=32, D=24, b=b, bh=1.3, rhd=100)
+h10 <- hlevel(10, 32, 0.956*24, b, 1.3)  # height for diameter 10
+volume(h1=0.3, h2=h10, H=32, D=0.956*24, b=b, bh=1.3, rhd=100)
 @
 \noindent
 Before it was not necessary to worry about the units of diameter and height, it did not matter if they were different. For volume, it \emph{does} matter, and one has to specify \code{rhd}, the ratio between the units of height and diameter. In this case, height in meters and diameter in centimeters give \code{rhd = 100}. If the height were in feet and the diameters in inches, we would have \code{rhd = 12}.
@@ -299,9 +300,9 @@ Dob <- brink$Dob[brink$h == 1.35]
 mean(Dib / Dob)
 @
 \noindent
-Although less intuitive, I might rather use a log transform. It may be more homoscedastic, and produces the same value for converting from outside to inside bark or vice-versa:
+Although less intuitive, I would rather use a log transform. It produces the same value for converting from outside- to inside bark or vice-versa, and it may help with heterocedasticity:
 <<>>=
-exp(mean(log(Dib) - log(Dob)))
+exp(mean(log(Dib / Dob)))
 k <- 0.908  # no practical difference, this should be  good enough
 @
 \noindent
@@ -337,6 +338,8 @@ bhl <- c(b1=2.225, b2=01, b3=0.2826, b4=1.087, b5=1)
 \noindent
 Do not take this too seriously, it is a small dataset.
 Feel free to play around with other possibilities, plotting results, etc.
+
+One could have fitted the model using the measured instead of the converted \code{Dib}. You might like to see how much difference that makes. Which would be better? 
 
 Of course, if you want to publish, ordinary least-squares (OLS) won't cut it. Currently, using mixed-effects methods is a \emph{de facto} publication requirement (AI approaches are also accepted). Fear not, procedures similar to those above can be used with packages \pkg{nlme} or \pkg{lme4}. It actually helps if you do not understand how the methods work!
 Oh, and do not use simple letters like $h$ and $H$, something like $\text{TreeHt}^\text{(tot)}_i$ makes equations more impressive.

@@ -1,6 +1,6 @@
-#' Small taper data set from Brink and von Gadow (1986).
+#' Small taper dataset from Brink and von Gadow (1986).
 #'
-#' Taper measurements on 10 \emph{Eucalyptus cJoeziana} trees.
+#' Taper measurements on 10 \emph{Eucalyptus cloeziana} trees.
 #'
 #' @docType data
 #'

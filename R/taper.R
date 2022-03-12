@@ -19,7 +19,7 @@
 #' @export
 #'
 #' @examples
-#'   curve(taper(x, 32, 24, c(2.569, 0, 1.042, 0.3012, -1), 1.3), 0, 32)
+#'   curve(taper(x, 32, 0.956*24, c(2.569, 0, 1.042, 0.3012, -1), 1.3), 0, 32)
 #'
 taper <- function(h, H, D, b, bh, area = FALSE){
   r <- tbase(h, H, b) / tbase(bh, H, b) # relative area
