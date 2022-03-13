@@ -15,7 +15,7 @@ For a tutorial, see the [vignette](dyntaper.pdf).
 You can install dyntaper like so:
 
 ``` r
-devtools::install_github("ogarciav/dyntaper", build_vignettes = TRUE)
+remotes::install_github("ogarciav/dyntaper", build_vignettes = TRUE)
 ```
 
 ## Example

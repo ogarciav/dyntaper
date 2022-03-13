@@ -89,9 +89,11 @@
 
 
 
-\title{An effective biologically-based taper equation}
-\author{Vignette for the \pkg{taper} \lang{R} package}  % Oscar Garc\'ia
-\date{} % Draft, \today}
+\title{An effective biologically-based \\ taper equation}
+\author{Vignette for the \pkg{dyntaper} \lang{R} package
+  \thanks{\url{https://github.com/ogarciav/dyntaper}}
+}
+\date{Oscar Garc\'ia, \today}
 
 \begin{document}
 \maketitle
@@ -339,7 +341,7 @@ bhl <- c(b1=2.225, b2=01, b3=0.2826, b4=1.087, b5=1)
 Do not take this too seriously, it is a small dataset.
 Feel free to play around with other possibilities, plotting results, etc.
 
-One could have fitted the model using the measured instead of the converted \code{Dib}. You might like to see how much difference that makes. Which would be better? 
+One could have fitted the model using the measured instead of the converted \code{Dib}. You might like to see how much difference that makes. Which would be better?
 
 Of course, if you want to publish, ordinary least-squares (OLS) won't cut it. Currently, using mixed-effects methods is a \emph{de facto} publication requirement (AI approaches are also accepted). Fear not, procedures similar to those above can be used with packages \pkg{nlme} or \pkg{lme4}. It actually helps if you do not understand how the methods work!
 Oh, and do not use simple letters like $h$ and $H$, something like $\text{TreeHt}^\text{(tot)}_i$ makes equations more impressive.
@@ -543,7 +545,7 @@ where $S$ is area at breast height $h_b$, and
 \[
     s(h, H) = \Phi(H-h) + (H-h) \eta(h) \;,
 \]
-according to equations (2) and (3) in \citet{dyntaper}, or see sec.~\ref{sec:intro}.
+according to equations (2) and (3) of \citet{dyntaper}, or see sec.~\ref{sec:intro}.
 Here,
 \[
     \Phi(x) = \int_0^x \varphi(x) \dd x = \int_0^x [1 - \delta(x/b_1, b_2)]
@@ -594,10 +596,5 @@ Therefore,the volume is given by eq.~\eqref{eq:vol} and
      b_3 b_4 (H - h) I_\delta(h/b_4, b_5) +
         b_3 b_4^2 I_{\delta\delta} (h/b_4, b_5) \;.
 \end{multline}
-
-
-
-
-\bigskip\today
 
 \end{document}
