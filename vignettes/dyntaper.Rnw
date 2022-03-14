@@ -239,9 +239,9 @@ The exact values of $b_2$ and $b_5$ have a relatively small effect on stem form,
 Then, one may view the general model as defining a family of more parsimonious taper equations. The base eq.~\eqref{eq:s} can be written more explicitly as:
 \begin{align} \label{eq:spec}
     s(h, H) = H - h - &\begin{cases}
-                              b_1 \left[1 - \e^{-\frac{H - h}{b_1}}\right] & \text{if } b_2 = 0 \\
-                              \frac{b_1}{2} \left\{1 - \left[1 - \frac{2}{b_1} (H - h)\right]^2 \right\}  & \text{if } b_2 = 1 \\
-                               \frac{b_1}{b_2+1} \left\{1 - \left[1 - \frac{b_2+1}{b_1} (H - h)\right]_+^{\frac{1}{b_2}+1} \right\} & \text{otherwise}
+              b_1 \left(1 - \e^{-\frac{H - h}{b_1}}\right) & \text{if } b_2 = 0 \\
+              b_1 \ln \left(\frac{H-h}{b_1} + 1\right)  & \text{if } b_2 = -1 \\
+              \frac{b_1}{b_2+1} \left\{1 - \left[1 - \frac{b_2+1}{b_1} (H - h)\right]_+^{\frac{1}{b_2}+1} \right\} & \text{otherwise}
                           \end{cases} \nonumber \\
             + b_3 (H - h) &\begin{cases}
                               \e^{-\frac{h}{b_4}}  & \text{if } b_5 = 0 \\
