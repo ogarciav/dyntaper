@@ -93,7 +93,7 @@
 \author{Vignette for the \pkg{dyntaper} \lang{R} package
   \thanks{\url{https://github.com/ogarciav/dyntaper}}
 }
-\date{Oscar Garc\'ia, \today}
+\date{Oscar Garc\'ia, April 4, 2022}
 
 \begin{document}
 \maketitle
@@ -113,26 +113,26 @@ options(width=67)
 \section{Introduction}
 \label{sec:intro}
 
-Taper or stem profile equations (or functions) predict stem diameters as a function of height above ground, total tree height, and diameter at breast height (dbh). It is important to realize that this can only be an approximation: one can expect a dominant tree to have a different bole shape than a suppressed tree in another stand with the same height and dbh. Stand density and other variables can also have an effect. Attempts at introducing additional variables have usually shown little or no improvement in predictions, although in some instances stand variables can partially compensate for a bad choice of taper equation form. Even if improved predictions could be achieved, it is difficult to beat the practicality and convenience of requiring only height and dbh.
+Taper or stem profile equations (or functions) predict stem diameters as a function of height above ground, total tree height, and diameter at breast height (dbh). It is important to realize that this can only be an approximation: one can expect a dominant tree to have a different bole shape than a suppressed tree with the same height and dbh in another stand. Stand density and other variables can also have an effect. Attempts at introducing additional variables have usually shown little or no improvement in predictions, although in some instances stand variables can partially compensate for a bad choice of taper equation form. Even if improved predictions could be achieved, it is difficult to beat the practicality and convenience of requiring only height and dbh.
 
-Also, stem measurements are notoriously imprecise, affected by stem irregularities, bark measurement errors, and deviations from a circular cross-section. The taper equation is essentially a convenient fiction, postulating a smooth regular shape applicable to every tree. These models are very useful, but one should keep the limitations in perspective. No need to agonize over precise mathematical details or elaborate statistical niceties (more on this later).
+Also, stem measurements are notoriously imprecise, being affected by stem irregularities, bark measurement errors, and deviations from a circular cross-section. The taper equation is essentially a convenient fiction, postulating a smooth regular shape applicable to every tree. These models are very useful, but one should keep the limitations in perspective. No need to agonize over precise mathematical details or elaborate statistical niceties (more on this later).
 
-Practical taper models have been empirical and static, without much biological justification and giving the stem profile at one point in time. A realistic mathematical description of the entire tree has required a large number of adjustable parameters. In contrast, I explain here a model based on plausible approximations to the mechanisms of wood formation that generates robust whole-tree profiles with few free parameters \citep{dyntaper}. It is dynamically sound, with a coherent development over time, which may be important in some applications.
+Practical taper models have been empirical and static, without much biological justification and giving the stem profile at one point in time. A realistic mathematical description of the entire tree has required a large number of adjustable parameters. In contrast, I explain here a model based on plausible approximations to the mechanisms of wood formation, that generates robust whole-tree profiles with few free parameters \citep{dyntaper}. The model is dynamically sound, producing a coherent development over time, which may be important in some applications.
 
-In what follows, I first describe the model motivation. This includes the pattern of annual wood layers, and how they accumulate to give rise to the stem shape. Then, we look at the methods and \lang{R} functions used to calculate diameter profiles, heights for given diameters, and volumes between specified heights or diameters. Finally, I demonstrate some methods of parameter estimation and model evaluation. Detailed mathematical derivations are given in the Appendix.
+In what follows, I first describe the model motivation. This includes the conformation of annual wood layers, and how they accumulate to give rise to the stem shape. Then, we look at the methods and \lang{R} functions used to calculate diameter profiles, heights for given diameters, and volumes between specified heights or diameters. Finally, I demonstrate some methods of parameter estimation and model evaluation. Detailed mathematical derivations are given in the Appendix.
 
 \section{Theory}
 \label{sec:theo}
 
 This section is not strictly necessary for applying the model. Feel free to skim over it, coming back some other day if you become curious.
 
-\fig[0.5]{vinci}{Relationship between wood cross section and foliage, according to Leonardo da Vinci (ca.~1500).}
+\fig[0.5]{vinci}{Relationship between wood cross-section and foliage, according to Leonardo da Vinci (ca.~1500).}
 
-Stem form is the result of the accumulation of annual wood layers produced by the cambium. There are various theories about what determines the vertical thickness distribution of the layers. For instance, a popular one is that the layer cross-sectional area is proportional to the amount of foliage above each point. The idea can be traced back to Leonardo da Vinci (Fig.~\ref{fig:vinci}), was developed by Pressler in 1864, and rediscovered by Japanese scientists in the 1960s (the  ``pipes theory''). Pressler assumed a uniform vertical distribution of foliage in the crown, so that the area increment increases linearly downwards, from 0 at the tip of the tree to some maximum at the base of the green crown, remaining constant below that. This, and its consequences for the development of stem form, were nicely illustrated by \citet{mitchell}, see Fig.~\ref{fig:mitchell}.
+Stem form is the result of the accumulation of annual wood layers produced by the cambium. There are various theories about what determines the thickness pattern of the layers. For instance, a popular one is that the layer's cross-sectional area is proportional to the amount of foliage above each point. The idea can be traced back to Leonardo da Vinci (Fig.~\ref{fig:vinci}), it was developed by Pressler in 1864, and rediscovered by Japanese scientists in the 1960s (the  ``pipe model theory''). Pressler assumed a uniform vertical distribution of foliage in the crown, so that the area increment increases linearly downwards, from 0 at the tip of the tree to some maximum at the base of the green crown, remaining constant below that. This, and its consequences for the development of stem form, were nicely illustrated by \citet{mitchell}, see Fig.~\ref{fig:mitchell}.
 
 \fig{mitchell}{From \citet{mitchell}.}
 
-Apart from the Vinci--Pressler--pipes hypothesis, there are other theories based on biomechanical considerations. \citet{larson} is still a nice review. Another oldie but goodie is \citet{gray}. Observational data for the annual layer thickness is typically very noisy, but it often suggests something like an asymptotic curve for the increase in area with distance from the top, more than a straight line. For instance, ignoring scale factors,
+Apart from the Vinci--Pressler--pipe hypothesis, there are other theories based on biomechanical considerations. \citet{larson} is still a nice overview. Another oldie but goodie is \citet{gray}. Observational data for the annual layer thickness is typically very noisy, but more than a straight line, it often suggests something like an asymptotic curve for the increase in area with distance from the top. For instance, ignoring scale factors,
 <<>>=
 curve(pmin(x, 1), from=0, to=3)     # Pressler
 curve(1 - exp(-x), 0, 3, add=TRUE)  # exponential
@@ -149,7 +149,7 @@ noting that $x = H - h$.
 
 We can now accumulate these increments to obtain the total stem cross-sectional area at any given height level $h$. And from that, the diameter and taper function. It is convenient to take eq.~\eqref{eq:ds} as relative to height growth, expressed as area increment per unit of height increment. Then, we can accumulate by integrating over height, from when the tree height reaches the level $h$ to the final height $H$.
 
-To get tractable results we make a simplifying assumption: the functions $\varphi(x)$ and $\eta(h)$ do not change over time or among trees (almost). More precisely, they do not change while the tree grows between $h$ and $H$. And the actual growth is assumed to be \emph{proportional} to eq.~\eqref{eq:ds}, with a proportionality factor  that can vary from tree to tree. Then, the stem cross-section at level $h$ in a tree of height $H$ is
+To get tractable results we make a simplifying assumption: the functions $\varphi(x)$ and $\eta(h)$ do not change over time or among trees (almost). More precisely, they do not change while the tree grows between $h$ and $H$. And the actual growth is assumed to be \emph{proportional} to eq.~\eqref{eq:ds}, with a proportionality factor that can vary from tree to tree. Then, the stem cross-section at level $h$ in a tree of height $H$ is
 proportional to
 \[
     s(h, H) = \int_h^H \left[\varphi(y - h) + \eta(h)\right] \dd y
@@ -167,12 +167,12 @@ and the simplification is just too convenient.
 
 It remains to choose suitable forms for $\varphi(x)$ and $\eta(h)$.
 
-In the case of $\eta$ we want some ``decay'' function that, ignoring scale factors, starts at 1 for $h=0$ and decreases to 0 as $h$ increases. For instance, a negative exponential $e^{-h}$, or a hyperbola $1 / (1+h)$. More generally, $(1 - p h)^{1/p}$ includes these and many other forms as special cases for given values of $p$: the exponential is the limit as $p \rightarrow 0$, and the hyperbola is obtained with $p = -1$. Define then a general decay function
+In the case of $\eta$, we want some ``decay'' function that, ignoring scale factors, starts at 1 for $h=0$ and decreases to 0 as $h$ increases. For instance, a negative exponential $e^{-h}$, or a hyperbola $1 / (1+h)$. More generally, $(1 - p h)^{1/p}$ includes these and many other forms as special cases for given values of $p$: the exponential is the limit as $p \rightarrow 0$, and the hyperbola is obtained with $p = -1$. Define then a general decay function
 \begin{align*} \label{eq:d}
     \delta(y, p) &= (1 - p y)_+^{1/p} \text{ if } p \neq 0 \;, \\
     \delta(y, 0) &= \e^{-y} \;.
 \end{align*}
-The notation $(\cdot)_+$ is shorthand for the non-negative truncation $max\{\cdot, 0\}$, which can be relevant when $p > 0$. This is implemented in the package function \code{decay()}:
+The notation $(\cdot)_+$ is shorthand for the non-negative truncation $max\{\cdot, 0\}$, which can be relevant when $p > 0$. This $\delta()$ is implemented in the package function \code{decay()}:
 <<>>=
 library(dyntaper)
 for(p in seq(1, -1, -0.5)) curve(decay(y, p), xname="y", from=0,
@@ -205,24 +205,24 @@ Finally, the tree-dependent proportionality factor can be resolved by forcing th
     d(h, H, D) = D \sqrt{\frac{s(h, H)}{s(h_b, H)}} \;.
 \end{equation}
 This assumes that all the diameters are  outside bark, or all are inside bark. If, for instance, the stem diameter measurements are inside bark but the dbh is outside bark, one could substitute $k D$ for $D$, where $k$ is an estimated bark conversion factor.
-The taper equation is computed with \code{taper()}, see examples below.
-The functions \code{decay}, \code{Id} and \code{tbase} are used internally by other functions, normally not directly by the user.
+The taper equation \eqref{eq:taper} is computed with \code{taper()}, see examples below.
+The functions \code{decay}, \code{Id}, and \code{tbase} are used internally by other functions, normally not directly by the user.
 
-Admittedly, this derivation uses some fairly rough approximations. At worst, you can view it as a way of obtaining a reasonable stem profile description that is flexible and not too complex. Integration tends to lessen the impact of growth mechanism details, and conversely, differencing amplifies observation noise.  Which explains why after some one and a half centuries, very different stem form generating hypotheses coexist; it is difficult to discriminate among them based on external stem measurements.
+Admittedly, this derivation uses some fairly rough approximations. At worst, you can view it as a way of obtaining a reasonable stem profile description that is flexible and not too complex. Integration tends to lessen the impact of growth mechanism details, and conversely, differencing amplifies observation noise.  Which explains why after some 1.5 centuries very different stem form generating hypotheses coexist; it is difficult to discriminate among them based on external stem measurements.
 
-This taper model fits well the form of entire trees, with just 3 or 5 free parameters, depending on if we count the shape parameters $b_2$ and $b_5$ or not. Rounding the shape parameters to small integers does not make much difference, resulting in simplified forms of eq.~\eqref{eq:s}. The simplest is the \emph{exponential-exponential} version with $b_2 = b_5  = 0$. This is similar to the Brink equations used successfully by several authors \citep{brink,arias}. See also \citet{koirala}. In \citet{dyntaper}, the best model was the \emph{exponential-hyperbolic}, with $b_2 = 0$ and $b_5 = -1$. See specific forms in eq.~\eqref{eq:spec}, below.
+This taper model fits well the form of entire trees, with just 3 or 5 free parameters, depending on whether we count the shape parameters $b_2$ and $b_5$ or not. Rounding the shape parameters to small integers does not make much difference, resulting in simplified forms of eq.~\eqref{eq:base}. The simplest is the \emph{exponential-exponential} version with $b_2 = b_5  = 0$. This resembles the Brink equations used successfully by several authors \citep{brink,arias}. See also \citet{koirala}. In \citet{dyntaper}, the best model was the \emph{exponential-hyperbolic}, with $b_2 = 0$ and $b_5 = -1$. See specific forms in eq.~\eqref{eq:spec}, below.
 
 Exercise: \emph{Variable-form}, or \emph{variable-exponent}, is one of the categories into which taper models are commonly classified. A typical example is
 \begin{equation*}
     d = D \left(\frac{H - h}{H - h_b}\right)^{f(h, H, D)}
 \end{equation*}
-for some complicated function $f()$. Other similar expressions inside the parenthesis, and transformations of $D$, are also used. Convince yourself that any taper function $d = g(h, H, D)$ (such as eq.~\eqref{eq:taper}) can be written in this form by making $f(h, H, D) = \log[g(h, H, D) / D] / \log[(H -h) / (H - h_b)]$.
+for some complicated function $f()$. Other similar expressions inside the parenthesis, and powers of $D$, are also used. Convince yourself that any taper function $d = g(h, H, D)$ (such as eq.~\eqref{eq:taper}) can be written in this form by making $f(h, H, D) = \log[g(h, H, D) / D] / \log[(H -h) / (H - h_b)]$.
 
 
 
 \section{Taper} \label{sec:taper}
 
-The taper model is given by eqs.~\eqref{eq:base} and \eqref{eq:taper}, and is implemented in function \code{taper()}. For instance, for a tree with a total height of 32 m and dbh of 24 cm (breast height 1.3 m), using the same vector \code{b} of coefficients as above,
+The taper model is given by eqs.~\eqref{eq:base} and \eqref{eq:taper}, and is implemented in function \code{taper()}. For instance, for a tree with a total height of 32 m and dbh of 24 cm (breast height 1.3 m), using the same vector \code{b} of coefficients as before,
 <<>>=
 curve(
   taper(h, H=32, D=0.956*24, b=b, bh=1.3),
@@ -235,8 +235,8 @@ Setting \code{area=TRUE} returns cross-sectional areas instead of diameters.
 The parameter $b_1$ is supposed to be related to crown length, $b_3$ reflects the contribution of butt swell, and $b_4$ determines how high the but swell extends up from the ground.
 The shape parameters $b_2$ and $b_5$ affect the distribution of diameter (or area) increment in the top of the tree and in the butt swell, respectively.
 
-The exact values of $b_2$ and $b_5$ have a relatively small effect on stem form, and I suggest fixing them at ``nice'' values like 0, 1, or -1 in the final model. Leaving free these shape parameters during model development can help make that choice.
-Then, one may view the general model as defining a family of more parsimonious taper equations. The base eq.~\eqref{eq:s} can be written more explicitly as:
+The exact values of $b_2$ and $b_5$ have a relatively small effect on stem form, and I suggest fixing them at ``nice'' values like 0, 1, or -1 in the final model. The choice can be guided by leaving free these shape parameters during model development.
+Then, one may view the general model as defining a family of more parsimonious taper equations. The base eq.~\eqref{eq:base} can be written more explicitly as:
 \begin{align} \label{eq:spec}
     s(h, H) = H - h - &\begin{cases}
               b_1 \left(1 - \e^{-\frac{H - h}{b_1}}\right) & \text{if } b_2 = 0 \\
@@ -261,14 +261,14 @@ For instance, the height at which the diameter is 15 cm in a tree 32 m tall with
 hlevel(15, H=32, D=0.956*24, b=b, bh=1.3)
 @
 \noindent
-The leading \verb|##| are not displayed by \lang{R}, but are used here to distinguish outputs from inputs. Setting the parameter \code{area = TRUE} produces the height for a given cross-sectional area.
+The leading \verb|##| are not displayed by \lang{R}, they are used here to distinguish outputs from inputs. Setting the parameter \code{area = TRUE} produces the height for a given cross-sectional area.
 
 Exercises: (a) Check that the diameter at breast height is as it should be. (b) What happens if the diameter does not exist (e.~g., $d = 30$)?
 
-\section{Volmes}
+\section{Volumes}
 \label{sec:vol}
 
-A common use of taper equations is the computation of stem volume. Either total volume, or the volume between two given height levels. Levels might be specified as those corresponding to a certain diameter, and then the corresponding height level can be obtained with \code{hlevel()} (section \ref{sec:h}).
+A common use of taper equations is the computation of stem volume. Either total volume, or the volume between two given height levels. Levels might be specified as those corresponding to a certain diameter, and then the corresponding height level can be obtained with \code{hlevel()} (Section \ref{sec:h}).
 
 Volume is given by the integral of the cross-sectional area between the two height levels. Our taper model can be integrated analytically so that no numerical approximations are needed (Appendix). The general expression is a bit messy, but values can be calculated with function \code{volume()}.
 
@@ -278,22 +278,22 @@ h10 <- hlevel(10, 32, 0.956*24, b, 1.3)  # height for diameter 10
 volume(h1=0.3, h2=h10, H=32, D=0.956*24, b=b, bh=1.3, rhd=100)
 @
 \noindent
-Before it was not necessary to worry about the units of diameter and height, it did not matter if they were different. For volume, it \emph{does} matter, and one has to specify \code{rhd}, the ratio between the units of height and diameter. In this case, height in meters and diameter in centimeters give \code{rhd = 100}. If the height were in feet and the diameters in inches, we would have \code{rhd = 12}.
+Before it was not necessary to worry about the units of diameter and height, it did not matter if they were different. For volume, it \emph{does} matter, and one has to specify \code{rhd}, the ratio between the units of height and diameter. In this instance, height in meters and diameter in centimeters give \code{rhd = 100}. If the heights were in feet and the diameters in inches, we would have \code{rhd = 12}.
 
-Exercises: Find (a) total volume;  (b) sawlog volume between stamp and a limit diameter of 20 cm, and pulpwood volume above that up to a 10 cm limit.
+Exercises: Find (a) total volume;  (b) sawlogs volume between stump and a limit diameter of 20 cm, and pulpwood volume above that up to a 10 cm limit.
 
 
 \section{Parameter estimation}
 \label{sec:est}
 
-Let's demonstrate a simple example of model fitting. The package includes a small dataset with measurements from 10 eucalypt trees, from \citet{brink}:
+Let's demonstrate an example of model fitting. The package includes a small dataset with measurements from 10 eucalypt trees, taken from \citet{brink}:
 <<>>=
 summary(brink)
 library(lattice)
 xyplot(dib ~ h, groups=Tree, data=brink, type="b")
 @
 \noindent
-The stem diameter measurements \code{dib} for each height level \code{h} are inside- bark, while the tree dbh \code{Dob} is outside bark. Diameters are in centimeters, heights in meters.
+The diameter measurements \code{dib} for each height level \code{h} are inside bark, while the tree dbh \code{Dob} is outside bark. Diameters are in centimeters, heights in meters.
 
 We need to convert dbh values from outside to inside bark. The data includes the observed inside-bark diameter at the breast height of 1.35 m, from which one can estimate a conversion factor $k$:
 <<>>=
@@ -302,14 +302,14 @@ Dob <- brink$Dob[brink$h == 1.35]
 mean(Dib / Dob)
 @
 \noindent
-Although less intuitive, I would rather use a log transform. It produces the same value for converting from outside- to inside bark or vice-versa, and it may help with heterocedasticity:
+Although less intuitive, I would rather use a log transform. It produces the same value for converting from outside to inside bark or vice-versa, and it may help with heteroscedasticity:
 <<>>=
 exp(mean(log(Dib / Dob)))
 k <- 0.908  # no practical difference, this should be  good enough
 @
 \noindent
 
-Now, should we fit diameters or cross-sectional areas? In theory, areas should produce better volume estimates \citep{dyntaper}. On the other hand, researchers usually evaluate taper models based on diameter predictions. Let's stick to diameters here, and use the non-linear least-squares function \code{nls()}. It is a good idea to start with a simple model, so first, fit the exponential-exponential version:
+Now, should we fit diameters or cross-sectional areas? In theory, areas would produce better volume estimates \citep{dyntaper}. On the other hand, researchers usually evaluate taper models based on diameter predictions. Let's stick to diameters here, and use the non-linear least-squares function \code{nls()}. It is a good idea to start with a simple model, so first, fit the exponential-exponential version:
 <<>>=
 expexp <- nls(dib ~ taper(h, H, k*Dob, c(b1, 0, b3, b4, 0), 1.35),
               data=brink, start=c(b1=4, b3=1, b4=1))
@@ -317,13 +317,13 @@ summary(expexp)
 AIC(expexp)  # Akaike's criterion
 @
 \noindent
-Free-up the shape parameters:
+Free up the shape parameters:
 <<error=TRUE, purl=FALSE>>=
 full <- nls(dib ~ taper(h, H, k*Dob, c(b1, b2, b3, b4, b5), 1.35),
             data=brink, start=c(coef(expexp), b2=0, b5=0))
 @
 \noindent
-This is a common issue with \code{nls()}, and here it may be triggered by over-parametrization. There are reportedly more robust alternatives. For instance, function \code{nlsLM()} from package \pkg{minpack.lm} succeeds in converging to a solution. Or simply, nudge \code{b5} a little to get the algorithm unstuck:
+This is a common issue with \code{nls()}, here it may be triggered by over-parametrization. There are reportedly more robust alternatives. For instance, function \code{nlsLM()} from package \pkg{minpack.lm} succeeds in converging to a solution. Or simply, nudge \code{b5} a little to get the algorithm unstuck:
 <<>>=
 (full <- nls(dib ~ taper(h, H, k*Dob, c(b1, b2, b3, b4, b5), 1.35),
              data=brink, start=c(coef(expexp), b2=0, b5=0.1)))
@@ -341,7 +341,7 @@ bhl <- c(b1=2.225, b2=01, b3=0.2826, b4=1.087, b5=1)
 Do not take this too seriously, it is a small dataset.
 Feel free to play around with other possibilities, plotting results, etc.
 
-One could have fitted the model using the measured instead of the converted \code{Dib}. You might like to see how much difference that makes. Which would be better?
+One could have fitted the model using the measured instead of the converted \code{Dib}. You might like to see how much difference that makes. Which is better?
 
 Of course, if you want to publish, ordinary least-squares (OLS) won't cut it. Currently, using mixed-effects methods is a \emph{de facto} publication requirement (AI approaches are also accepted). Fear not, procedures similar to those above can be used with packages \pkg{nlme} or \pkg{lme4}. It actually helps if you do not understand how the methods work!
 Oh, and do not use simple letters like $h$ and $H$, something like $\text{TreeHt}^\text{(tot)}_i$ makes equations more impressive.
@@ -371,7 +371,7 @@ It is found that the percentage of possibly correlated pairs for a sample of $T$
 \section{Validation}
 \label{sec:val}
 
-Model evaluation should consider not only overall statistics like root-mean-square errors (RMSE) or AIC, but also the fit for various variable values. Observations in the lower or upper part of the stem, and for small or large trees. For instance, the following gives the mean bias for small, medium, and large trees, at lower, medium, and upper levels:
+Model evaluation should consider not only overall statistics like root-mean-square error (RMSE) or AIC, but also the fit for various variable values. Observations in the lower or upper part of the stem, and for small or large trees. For instance, the following gives the mean bias for small, medium, and large trees, at lower, medium, and upper levels:
 <<>>=
 with(brink,
   tapply(residuals(hyplin), list(
@@ -410,22 +410,22 @@ Exercises: (a) Re-calculate the biases using \code{gridify()}. (b) Use the above
 
 \begin{thebibliography}{99} \addcontentsline{toc}{section}{References}
 
-\bibitem[Larson(1963)Larson]{larson} Larson, P. R. (1963) Stem Form Development of Forest Trees. \emph{Forest Science Monograph 5}, Society of American Foresters, Washington, DC.
-
-\bibitem[Garc\'ia(2015)Garc\'ia]{dyntaper} Garc\'ia, O. (2015) Dynamic Modelling of Tree Form. \emph{MCFNS 7}, 9–15. (\url{http://mcfns.net/index.php/Journal/article/view/MCFNS7.1_2}).
-
-\bibitem[Mitchell(1975)Mitchell]{mitchell} Mitchell, K. J. (1975) Dynamics and Simulated Yield of {D}ouglas-Fir. \emph{Forest Science Monograph 17}, Society of American Foresters, Washington, DC.
+\bibitem[Arias-Rodil \emph{et al}(2015)Arias-Rodil \emph{et al}]{arias} Arias-Rodil, M., Diéguez-Aranda, U., Rodríguez Puerta, F., López-Sánchez, C. A., Canga Líbano, E., Cámara Obregón, A. and Castedo-Dorado, F. (2015) Modelling and localizing a stem taper function for \emph{{P}inus radiata} in {S}pain. \emph{Canadian J. of Forest Research 45}, 647-–658.
 
 \bibitem[Brink and von Gadow(1986)Brink and von Gadow]{brink} Brink, C. and von Gadow, K. (1986) On the use of growth and decay functions for modelling stem profiles. \emph{EDV in Medizin und Biologi 17}, 20–-27.
 
-\bibitem[Arias-Rodil \emph{et al}(2015)Arias-Rodil \emph{et al}]{arias} Arias-Rodil, M., Diéguez-Aranda, U., Rodríguez Puerta, F., López-Sánchez, C. A., Canga Líbano, E., Cámara Obregón, A. and Castedo-Dorado, F. (2015) Modelling and localizing a stem taper function for \emph{{P}inus radiata} in {S}pain. \emph{Canadian J. of Forest Research 45}, 647-–658.
+\bibitem[Garc\'ia(2015)Garc\'ia]{dyntaper} Garc\'ia, O. (2015) Dynamic modelling of tree form. \emph{MCFNS 7}, 9–15. (\url{http://mcfns.net/index.php/Journal/article/view/MCFNS7.1_2}).
+
+\bibitem[Gray(1956)Gray]{gray} Gray, H. R. (1956) The Form and Taper of Forest-Tree Stems. Oxford University, Imperial Forest Institute Paper 32, 74p.
 
 \bibitem[He \emph{et al}(2021)He \emph{et al}]{he} He, P., Hussain, A., Shahzad, M. K., Jiang, L. and Li, F. (2021) Evaluation of four regression techniques for stem taper modeling of Dahurian larch (\emph{Larix gmelinii}) in Northeastern China. \emph{Forest Ecology and Management 494}.
 
 \bibitem[Koirala \emph{et al}(2021)Koirala \emph{et al}]{koirala} Koirala, A., Montes, C. R., Bullock, B. P. and Wagle, B. H. (2021) Developing taper equations for planted teak (\emph{Tectona grandis} L. f.) trees of central lowland Nepal. \emph{Trees, Forests and People 5}.
 (\url{https://doi.org/10.1016/j.tfp.2021.100103}).
 
-\bibitem[Gray(1956)Gray]{gray} Gray, H. R. (1956) The Form and Taper of Forest-Tree Stems. Institute Paper, Oxford University, Imperial Forest Institute Paper 32, 74p.
+\bibitem[Larson(1963)Larson]{larson} Larson, P. R. (1963) Stem Form Development of Forest Trees. \emph{Forest Science Monograph 5}, Society of American Foresters, Washington, DC.
+
+\bibitem[Mitchell(1975)Mitchell]{mitchell} Mitchell, K. J. (1975) Dynamics and Simulated Yield of {D}ouglas-Fir. \emph{Forest Science Monograph 17}, Society of American Foresters, Washington, DC.
 
 \end{thebibliography}
 
@@ -527,7 +527,6 @@ Summarizing,
         \frac{x}{p+1} - \frac{1}{(p+1)^2} I_\delta[(p+1) x, \frac{p}{p+1}] & \text{otherwise.} \\
         \end{cases}
 \end{equation}
-
 If $p = 0$ this simplifies to
 \begin{equation*} \label{eq:dd0}
     I_{\delta\delta}(x,0) = x -1 + \e^{-x} \;.
@@ -545,7 +544,7 @@ where $S$ is area at breast height $h_b$, and
 \[
     s(h, H) = \Phi(H-h) + (H-h) \eta(h) \;,
 \]
-according to equations (2) and (3) of \citet{dyntaper}, or see sec.~\ref{sec:intro}.
+according to Section \ref{sec:intro}, or see equations (2) and (3) of \citet{dyntaper}.
 Here,
 \[
     \Phi(x) = \int_0^x \varphi(x) \dd x = \int_0^x [1 - \delta(x/b_1, b_2)]
@@ -555,7 +554,7 @@ and $\eta(h) = b_3 \delta(h / b_4, b_5)$. Therefore,
 \begin{equation} \label{eq:As}
     s(h, H) = H - h - b_1 I_\delta[(H-h)/b_1, b_2] + b_3 (H - h) \delta(h / b_4, b_5)
 \end{equation}
-(see eqns.~(7) and (8) of \citet{dyntaper}). Note that the units for diameter and height do not need to be the same, conversion factors cancel out.
+(eqns.~(7) and (8) of \citet{dyntaper}). Note that the units for diameter and height do not need to be the same, conversion factors cancel out.
 
 
 
