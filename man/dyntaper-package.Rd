@@ -4,9 +4,9 @@
 \name{dyntaper-package}
 \alias{dyntaper}
 \alias{dyntaper-package}
-\title{dyntaper: Using a dynamic tree stem profile model}
+\title{dyntaper: Dynamic Stem Profile Models, AKA Tree Taper Equations}
 \description{
-Implements the model from García, O. (2015) "Dynamic modelling of tree form", MCFNS 7(1): 9-15.
+Performs calculations with tree taper (or stem profile) equations, including model fitting. The package implements the methods from García, O. (2015) "Dynamic modelling of tree form" \url{http://mcfns.net/index.php/Journal/article/view/MCFNS7.1_2}. The models are parsimonious, describe well the tree bole shape over its full length, and are consistent with wood formation mechanisms through time.
 }
 \details{
 The main functions relevant to the user are
@@ -43,7 +43,7 @@ García, O. (2015) "Dynamic modelling of tree form". \emph{Mathematical
 Koirala, A., Montes, C. R., Bullock, B. P. and Wagle, B. H. (2021) "Developing
   taper equations for planted teak (\emph{Tectona grandis} L. f.) trees of
   central lowland Nepal". \emph{Trees, Forests and People 5}.
-  (\url{https://doi.org/10.1016/j.tfp.2021.100103}).
+  (\doi{10.1016/j.tfp.2021.100103}).
 }
 \seealso{
 Useful links:
@@ -51,6 +51,10 @@ Useful links:
   \item \url{https://github.com/ogarciav/dyntaper}
   \item Report bugs at \url{https://github.com/ogarciav/dyntaper/issues}
 }
+
+}
+\author{
+\strong{Maintainer}: Oscar Garcia \email{garcia@dasometrics.net} (\href{https://orcid.org/0000-0002-8995-1341}{ORCID})
 
 }
 \keyword{internal}

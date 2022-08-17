@@ -1,15 +1,21 @@
 Package: dyntaper
-Type: Package
-Title: Using a dynamic tree stem profile model
-Version: 1.0
-Author: Oscar Garcia <https://orcid.org/0000-0002-8995-1341>
-Maintainer: O. Garcia <garciaf@dasometrics.net>
-Description: Implements the model from
-    García, O. (2015) "Dynamic modelling of tree form", MCFNS 7(1): 9-15.
+Title: Dynamic Stem Profile Models, AKA Tree Taper Equations
+Version: 1.1
+Authors@R: person("Oscar", "Garcia", role = c("cre", "aut"),
+    email ="garcia@dasometrics.net", comment = c(ORCID =
+    "0000-0002-8995-1341"))
+Description: Performs calculations with tree taper (or stem
+    profile) equations, including model fitting. The package
+    implements the methods from García, O. (2015) "Dynamic
+    modelling of tree form"
+    <http://mcfns.net/index.php/Journal/article/view/MCFNS7.1_2>.
+    The models are parsimonious, describe well the tree bole shape
+    over its full length, and are consistent with wood formation
+    mechanisms through time.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 Depends: 
     R (>= 2.10)
 VignetteBuilder: knitr

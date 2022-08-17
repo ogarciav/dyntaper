@@ -1,22 +1,28 @@
 
-# dyntaper  -  Using a dynamic tree stem profile model
+# dyntaper  -  Dynamic stem profile models, aka tree taper equations
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-An *R* package that implements the model of García (2015).
+An *R* package that performs calculations with tree taper (or stem 
+profile) equations, including model fitting. Implements the 
+methods of García (2015). The models are parsimonious, describe 
+well the tree bole shape over its full length, and are consistent 
+with wood formation mechanisms through time.
 
-The main functions are *taper()*, which calculates diameters at specified height levels up the tree, its inverse *hlevel()*, which gives the height level for a given diameter, and *volume()*, which computes the volume between two height levels.
+The main functions are *taper()*, which calculates diameters at 
+specified height levels up the tree, its inverse *hlevel()*, which 
+gives the height level for a given diameter, and *volume()*, which 
+computes the volume between two height levels.
 
 For a tutorial, see the [vignette](dyntaper.pdf).
 
 ## Installation
 
-You can install dyntaper like so:
+Install the stable version from CRAN: `install.packages("dyntaper")`\
+or with the RStudio menus: *Tools > Install Packages... > dyntaper* 
 
-``` r
-remotes::install_github("ogarciav/dyntaper", build_vignettes = TRUE)
-```
+For testing a newer development version from here, if any, use  `remotes::install_github("ogarciav/dyntaper", build_vignettes = TRUE)`
 
 ## Example
 

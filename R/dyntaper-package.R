@@ -32,7 +32,7 @@
 #' Koirala, A., Montes, C. R., Bullock, B. P. and Wagle, B. H. (2021) "Developing
 #'   taper equations for planted teak (\emph{Tectona grandis} L. f.) trees of
 #'   central lowland Nepal". \emph{Trees, Forests and People 5}.
-#'   (\url{https://doi.org/10.1016/j.tfp.2021.100103}).
+#'   (\doi{10.1016/j.tfp.2021.100103}).
 #'
 #' @keywords internal
 "_PACKAGE"
